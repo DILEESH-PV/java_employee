@@ -12,12 +12,19 @@ public class Employee
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.println("Enter the choice");
-            System.out.println("1 add an employee");
-            System.out.println("2 view all employee");
-            System.out.println("3 search an employee");
-            System.out.println("4 update the employee");
-            System.out.println("5 delete an employee");
-            System.out.println("6 exit");
+            System.out.println("1  Add an employee");
+            System.out.println("2  View all employee");
+            System.out.println("3  Search an employee");
+            System.out.println("4  Update an employee");
+            System.out.println("5  Delete an employee");
+            System.out.println("6  Display employee details by company");
+            System.out.println("7  Total number of employee in same designation");
+            System.out.println("8  Display  highest salary ");
+            System.out.println("9  Display  lowest salary");
+            System.out.println("10 Total salary");
+            System.out.println("11 Total number of employees");
+            System.out.println("12 Exit\n");
+
             choice = sc.nextInt();
             switch (choice)
              {
@@ -177,7 +184,132 @@ public class Employee
                         System.out.println(e);
                     }
                     break;
-                case 6:
+                 case 6:
+                     System.out.println("Enter company name");
+                     String cn=sc.next();
+                     try {
+                         Class.forName("com.mysql.jdbc.Driver");
+                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/employeedb", "root", "");
+                         String sql ="SELECT `EmpCode`, `Name`, `Designation`, `Salary`,`PhNo`, `Email` FROM `employees` WHERE `CName`='"+cn+"'";
+                         Statement stmt = con.createStatement();
+                         ResultSet rs = stmt.executeQuery(sql);
+                         while (rs.next())
+                           {
+                               String getEmpcode = rs.getString("EmpCode");
+                               String getName = rs.getString("Name");
+                               String getDesignation = rs.getString("Designation");
+                               String getSalary = rs.getString("Salary");
+                               String getPh = rs.getString("PhNo");
+                               String getEmail = rs.getString("Email");
+                               System.out.println("Employee Code     : " + getEmpcode);
+                               System.out.println("Name              : " + getName);
+                               System.out.println("Designation       : " + getDesignation);
+                               System.out.println("Salary            : " + getSalary);
+                               System.out.println("Ph No             : " + getPh);
+                               System.out.println("Email             : " + getEmail+"\n");
+
+                         }
+                     }
+                     catch (Exception e)
+                     {
+                         System.out.println(e);
+                     }
+                     break;
+                 case 7:
+                     try {
+                         Class.forName("com.mysql.jdbc.Driver");
+                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/employeedb", "root", "");
+                         String sql = "SELECT COUNT(`ID`)`ID`,`Designation` FROM `employees` GROUP BY `Designation`";
+                         Statement stmt = con.createStatement();
+                         ResultSet rs = stmt.executeQuery(sql);
+                         while (rs.next()) {
+                             String getId = rs.getString("ID");
+                             String getDe = rs.getString("Designation");
+                             System.out.println("Count : " + getId + "    " + getDe + "\n");
+
+                         }
+                     }
+                     catch (Exception e)
+                     {
+                         System.out.println(e);}break;
+                 case 8:
+                     try
+                     {
+                     Class.forName("com.mysql.jdbc.Driver");
+                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/employeedb", "root", "");
+                     String sql = "SELECT MAX(`Salary`)`Salary` FROM `employees` ";
+                     Statement stmt = con.createStatement();
+                     ResultSet rs = stmt.executeQuery(sql);
+                     while (rs.next())
+                     {
+                         String getSa = rs.getString("Salary");
+                        System.out.println("Highest salary");
+                         System.out.println("Salary    : " + getSa+"\n");
+                     }
+                   }
+                   catch (Exception e) {
+                       System.out.println(e);
+                   }
+                     break;
+                 case 9:
+                     try
+                     {
+                         Class.forName("com.mysql.jdbc.Driver");
+                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/employeedb", "root", "");
+                         String sql = "SELECT MIN(`Salary`)`Salary` FROM `employees` ";
+                         Statement stmt = con.createStatement();
+                         ResultSet rs = stmt.executeQuery(sql);
+                         while (rs.next())
+                         {
+                             String getSa = rs.getString("Salary");
+                             System.out.println("Lowest salary ");
+                             System.out.println("Salary       : " + getSa+"\n");
+                         }
+                     }
+                     catch (Exception e) {
+                         System.out.println(e);
+                     }
+                     break;
+                 case 10:
+                     try
+                     {
+                         Class.forName("com.mysql.jdbc.Driver");
+                         Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/employeedb", "root", "");
+                         String sql = "SELECT SUM(`Salary`) `Salary` FROM `employees`";
+                         Statement stmt = con.createStatement();
+                         ResultSet rs = stmt.executeQuery(sql);
+                         while (rs.next())
+                         {
+                            String getTotal = rs.getString("salary");
+                            System.out.println("Total Salary : " +getTotal+"\n" );
+
+
+                         }
+                     }
+                     catch (Exception e) {
+                         System.out.println(e);
+                     }
+                     break;
+                 case 11:
+                     try{
+                     Class.forName("com.mysql.jdbc.Driver");
+                     Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/employeedb", "root", "");
+                     String sql = "SELECT COUNT(`ID`)`ID`FROM `employees` ";
+                     Statement stmt = con.createStatement();
+                     ResultSet rs = stmt.executeQuery(sql);
+                     while (rs.next())
+                     {
+                         String getEc = rs.getString("ID");
+                         System.out.println("Total Employees  : " +getEc+"\n" );
+
+                     }
+             }
+                     catch (Exception e) {
+                System.out.println(e);
+            }
+            break;
+
+                 case 12:
                     System.exit(0);
                 default:
                     System.out.println("please select valid option");
